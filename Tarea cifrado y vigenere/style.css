@@ -1,0 +1,60 @@
+/* -----------------------------------------------------
+   Archivo: styles.css
+   Descripción: Estilos básicos para el Portafolio de Evidencias
+   ----------------------------------------------------- */
+
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f3f3f3;
+    color: #333;
+}
+
+/* Encabezado principal */
+h1 {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+
+/* Párrafos */
+p {
+    margin: 0.5em 0;
+}
+
+/* Estilo para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Elimina espacios entre celdas */
+    margin-top: 1em;
+    background-color: #fff;
+}
+
+/* Cabecera de la tabla */
+thead {
+    background-color: #ddd;
+}
+
+/* Celdas de la cabecera */
+th {
+    padding: 0.75em;
+    text-align: left;
+    border-bottom: 2px solid #ccc;
+}
+
+/* Celdas del cuerpo */
+td {
+    padding: 0.75em;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Enlaces */
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
