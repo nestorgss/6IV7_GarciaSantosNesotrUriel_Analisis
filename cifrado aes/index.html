@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Cifrado AES</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #191919, #191919);
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .container {
+      background-color: #ffe4d9;
+      color: black;
+      padding: 30px;
+      border-radius: 20px;
+      display: inline-block;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    textarea, input, button {
+      width: 80%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      resize: vertical;
+    }
+
+    input[type="file"] {
+      background-color: #fff;
+    }
+
+    button {
+      background-color: #191919;
+      color: white;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h1, h2 {
+      margin-bottom: 20px;
+    }
+
+    .section {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Aplicación de Cifrado y Descifrado AES</h1>
+
+    <button onclick="showSection('encrypt')">Cifrar mensaje</button>
+    <button onclick="showSection('decrypt')">Descifrar mensaje</button>
+
+    <!-- CIFRADO -->
+    <div id="encryptSection" class="section hidden">
+      <h2>Cifrar Mensaje</h2>
+      <textarea id="messageToEncrypt" placeholder="Escribe tu mensaje aquí..." rows="5"></textarea><br>
+      <input type="password" id="keyToEncrypt" placeholder="Clave (mínimo 4 caracteres)"><br>
+      <button onclick="encryptMessage()">Cifrar y descargar archivo</button>
+    </div>
+
+    <!-- DESCIFRADO -->
+    <div id="decryptSection" class="section hidden">
+      <h2>Descifrar Mensaje</h2>
+      <input type="file" id="fileToDecrypt"><br>
+      <input type="password" id="keyToDecrypt" placeholder="Clave (mínimo 4 caracteres)"><br>
+      <button onclick="decryptMessage()">Descifrar mensaje</button>
+      <textarea id="decryptedOutput" placeholder="Mensaje descifrado..." rows="5" readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    function showSection(section) {
+      document.getElementById('encryptSection').classList.add('hidden');
+      document.getElementById('decryptSection').classList.add('hidden');
+      document.getElementById(section + 'Section').classList.remove('hidden');
+    }
+
+    function encryptMessage() {
+      const message = document.getElementById('messageToEncrypt').value.trim();
+      const key = document.getElementById('keyToEncrypt').value;
+
+      if (!message) {
+        alert("El mensaje no puede estar vacío.");
+        return;
+      }
+
+      if (!key || key.length < 4) {
+        alert("La clave debe tener al menos 4 caracteres.");
+        return;
+      }
+
+      const encrypted = CryptoJS.AES.encrypt(message, key).toString();
+      const blob = new Blob([encrypted], { type: 'text/plain' });
+
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = "mensaje_cifrado.txt";
+      link.click();
+    }
+
+    function decryptMessage() {
+      const file = document.getElementById('fileToDecrypt').files[0];
+      const key = document.getElementById('keyToDecrypt').value;
+
+      if (!file) {
+        alert("Por favor selecciona un archivo.");
+        return;
+      }
+
+      if (!key || key.length < 4) {
+        alert("La clave debe tener al menos 4 caracteres.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const encrypted = e.target.result;
+          const decrypted = CryptoJS.AES.decrypt(encrypted, key).toString(CryptoJS.enc.Utf8);
+
+          if (!decrypted) {
+            throw new Error("Clave incorrecta o archivo inválido.");
+          }
+
+          document.getElementById('decryptedOutput').value = decrypted;
+        } catch (err) {
+          alert("Error al descifrar: " + err.message);
+        }
+      };
+
+      reader.readAsText(file);
+    }
+  </script>
+
+</body>
+</html>
